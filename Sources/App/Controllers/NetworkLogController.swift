@@ -25,7 +25,7 @@ struct NetworkLogController: RouteCollection {
     
     func all(req:Request) async throws -> ResponseModel<[NetworkLog]> {
         let logs = try await NetworkLog.query(on: req.db)
-            .filter(\.$request, .equal, \.$request)
+            .filter(\.$request.$method == "GET")
             .all()
         return ResponseModel(data: logs)
     }

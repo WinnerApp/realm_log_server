@@ -26,11 +26,11 @@ final class NetworkLog: Model, Content {
     var endTime:Int
     
     /// 请求的 Request 信息
-    @Field(key: "request")
+    @Group(key: "request")
     var request:NetworkRequestLog
     
     /// 请求的 Response 信息
-    @Field(key: "response")
+    @Group(key: "response")
     var response:NetworkResponseLog
     
     init() {}
