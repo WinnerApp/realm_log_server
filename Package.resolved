@@ -20,15 +20,6 @@
         }
       },
       {
-        "package": "BSON",
-        "repositoryURL": "https://github.com/OpenKitten/BSON.git",
-        "state": {
-          "branch": null,
-          "revision": "98a2c90988895f1b985ed0066180995df995924c",
-          "version": "7.0.28"
-        }
-      },
-      {
         "package": "console-kit",
         "repositoryURL": "https://github.com/vapor/console-kit.git",
         "state": {
@@ -56,21 +47,12 @@
         }
       },
       {
-        "package": "fluent-mongo-driver",
-        "repositoryURL": "https://github.com/vapor/fluent-mongo-driver.git",
+        "package": "fluent-postgres-driver",
+        "repositoryURL": "https://github.com/vapor/fluent-postgres-driver.git",
         "state": {
           "branch": null,
-          "revision": "ce519013f51439773fe668d6575888665b0e2dda",
-          "version": "1.0.2"
-        }
-      },
-      {
-        "package": "MongoKitten",
-        "repositoryURL": "https://github.com/OpenKitten/MongoKitten.git",
-        "state": {
-          "branch": null,
-          "revision": "25186c3f0ce69b6350fdbf067e8befc02e9a8ecc",
-          "version": "6.7.3"
+          "revision": "d27e8b194270e9d9f01a956f699a71184c4978a3",
+          "version": "2.2.3"
         }
       },
       {
@@ -83,12 +65,21 @@
         }
       },
       {
-        "package": "DNSClient",
-        "repositoryURL": "https://github.com/OpenKitten/NioDNS.git",
+        "package": "postgres-kit",
+        "repositoryURL": "https://github.com/vapor/postgres-kit.git",
         "state": {
           "branch": null,
-          "revision": "71cfedd3310d59b7d19e290176dd2a1a605a4252",
-          "version": "2.0.7"
+          "revision": "ea152d694198a7fd2b6b5b1beff0838373976006",
+          "version": "2.5.1"
+        }
+      },
+      {
+        "package": "postgres-nio",
+        "repositoryURL": "https://github.com/vapor/postgres-nio.git",
+        "state": {
+          "branch": null,
+          "revision": "780a510863bfc00b2239b649df4f403080c4bc9c",
+          "version": "1.7.2"
         }
       },
       {

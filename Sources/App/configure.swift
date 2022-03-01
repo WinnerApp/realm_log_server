@@ -1,5 +1,5 @@
 import Fluent
-import FluentMongoDriver
+import FluentPostgresDriver
 import Vapor
 
 // configures your application
@@ -9,12 +9,16 @@ public func configure(_ app: Application) throws {
 
     app.http.server.configuration.port = 9090
     
-    try app.databases.use(.mongo(
-        connectionString: Environment.get("DATABASE_URL") ?? "mongodb://127.0.0.1:27017/realm_log"
-    ), as: .mongo)
+    app.databases.use(.postgres(hostname: "127.0.0.1",
+                                    username: "postgres",
+                                    password: "1990823",
+                                    database: "realm_log"),
+                          as: .psql)
 
-    app.migrations.add(CreateTodo())
-
+    app.migrations.add(CreateNetworkLogMigrations())
+    try app.autoMigrate().wait()
+    
+    
     // register routes
     try routes(app)
 }
