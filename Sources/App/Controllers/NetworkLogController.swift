@@ -63,9 +63,9 @@ struct CreateListRequestContent:Content, Validatable {
 /// 验证提交的内容
 struct NetworkLogValidaable: Validatable {
     static func validations(_ validations: inout Validations) {
-        let timeMax = Int(Date.now.timeIntervalSince1970)
+        let timeMax = Int(Date.now.timeIntervalSince1970) * 1000
         /// 日志必须是一年以内的
-        let timeMin = timeMax - 1 * 365 * 24 * 60 * 60
+        let timeMin = timeMax - 1_000 * 365 * 24 * 60 * 60
         validations.add("startTime",
                         as: Int.self,
                         is: .range(timeMin ... timeMax),
@@ -83,7 +83,6 @@ struct NetworkLogValidaable: Validatable {
                             required: true)
             validations.add("baseUrl",
                             as: String.self,
-                            is: !.empty,
                             required: true)
             validations.add("extra",
                             as: String.self,
