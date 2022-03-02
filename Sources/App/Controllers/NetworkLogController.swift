@@ -14,12 +14,30 @@ struct NetworkLogController: RouteCollection {
         let group = routes.grouped("network_log")
         group.post(use:create)
         group.get(use:all)
+        
+        group.post("list", use: createList)
     }
     
     func create(req:Request) async throws -> ResponseModel<String> {
         try NetworkLogValidaable.validate(content: req)
         let log = try req.content.decode(NetworkLog.self)
         try await log.create(on: req.db)
+        return ResponseModel()
+    }
+    
+    func createList(req:Request) async throws -> ResponseModel<String> {
+        try CreateListRequestContent.validate(content: req)
+        let content = try req.content.decode(CreateListRequestContent.self)
+        guard !content.list.isEmpty else {
+            throw Abort(.custom(code: 1, reasonPhrase: "list不能为空"))
+        }
+        await withThrowingTaskGroup(of: Void.self, body: { group in
+            content.list.forEach { log in
+                group.addTask {
+                    try await log.create(on: req.db)
+                }
+            }
+        })
         return ResponseModel()
     }
     
@@ -30,6 +48,15 @@ struct NetworkLogController: RouteCollection {
         
         return ResponseModel(data: page.items,
                              page: page.metadata)
+    }
+}
+
+struct CreateListRequestContent:Content, Validatable {
+    let list:[NetworkLog]
+    static func validations(_ validations: inout Validations) {
+        validations.add(each: "list", required: true) { _, validations in
+            NetworkLogValidaable.validations(&validations)
+        }
     }
 }
 
