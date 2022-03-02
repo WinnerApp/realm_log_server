@@ -24,10 +24,12 @@ struct NetworkLogController: RouteCollection {
     }
     
     func all(req:Request) async throws -> ResponseModel<[NetworkLog]> {
-        let logs = try await NetworkLog.query(on: req.db)
+        let page = try await NetworkLog.query(on: req.db)
             .filter(\.$request.$method == "GET")
-            .all()
-        return ResponseModel(data: logs)
+            .paginate(for: req)
+        
+        return ResponseModel(data: page.items,
+                             page: page.metadata)
     }
 }
 
