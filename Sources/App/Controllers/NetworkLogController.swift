@@ -14,8 +14,10 @@ struct NetworkLogController: RouteCollection {
         let group = routes.grouped("network_log")
         group.post(use:create)
         group.get(use:all)
-        
-        group.post("list", use: createList)
+        group.on(.POST,
+                 "list",
+                 body: .collect(maxSize: "2mb"),
+                 use: createList)
     }
     
     func create(req:Request) async throws -> ResponseModel<String> {
@@ -43,7 +45,6 @@ struct NetworkLogController: RouteCollection {
     
     func all(req:Request) async throws -> ResponseModel<[NetworkLog]> {
         let page = try await NetworkLog.query(on: req.db)
-            .filter(\.$request.$method == "GET")
             .paginate(for: req)
         
         return ResponseModel(data: page.items,
