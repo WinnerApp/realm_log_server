@@ -12,6 +12,9 @@ RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
 # Set up a build area
 WORKDIR /build
 
+# set download package proxy change this if ip change
+RUN export https_proxy=http://192.168.8.101:7890 http_proxy=http://192.168.8.101:7890 all_proxy=socks5://192.168.8.101:7890
+
 # First just resolve dependencies.
 # This creates a cached layer that can be reused
 # as long as your Package.swift/Package.resolved
