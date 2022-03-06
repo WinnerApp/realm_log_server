@@ -12,8 +12,7 @@ RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
 # Set up a build area
 WORKDIR /build
 
-# set download package proxy change this if ip change
-RUN export https_proxy=http://192.168.8.101:7890 http_proxy=http://192.168.8.101:7890 all_proxy=socks5://192.168.8.101:7890
+RUN export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
 
 # First just resolve dependencies.
 # This creates a cached layer that can be reused
@@ -26,7 +25,7 @@ RUN swift package resolve
 COPY . .
 
 # Build everything, with optimizations
-RUN swift build -c release
+RUN swift build -c release --static-swift-stdlib
 
 # Switch to the staging area
 WORKDIR /staging
@@ -42,11 +41,12 @@ RUN [ -d /build/Resources ] && { mv /build/Resources ./Resources && chmod -R a-w
 # ================================
 # Run image
 # ================================
-FROM swift:5.5-focal-slim
+FROM ubuntu:focal
 
 # Make sure all system packages are up to date.
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true && \
-    apt-get -q update && apt-get -q dist-upgrade -y && rm -r /var/lib/apt/lists/*
+    apt-get -q update && apt-get -q dist-upgrade -y && apt-get -q install -y ca-certificates && \
+    rm -r /var/lib/apt/lists/*
 
 # Create a vapor user and group with /app as its home directory
 RUN useradd --user-group --create-home --system --skel /dev/null --home-dir /app vapor
