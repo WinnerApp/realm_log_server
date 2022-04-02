@@ -1,6 +1,9 @@
 import Fluent
 import Vapor
+import FluentKit
 
 func routes(_ app: Application) throws {
-    try app.register(collection: NetworkLogController())
+    let autoMirrorJob = try AutoMirrorJob(app: app)
+    autoMirrorJob.start()
 }
+

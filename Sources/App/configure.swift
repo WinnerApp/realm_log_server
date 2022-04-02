@@ -7,10 +7,6 @@ public func configure(_ app: Application) throws {
     // uncomment to serve files from /Public folder
     // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
 
-    app.http.server.configuration.port = 9090
-//    app.http.server.configuration.hostname = "10.10.57.130"
-    app.middleware.use(CORSMiddleware())
-    
     app.databases.use(.postgres(
         hostname: Environment.get("DATABASE_HOST") ?? "localhost",
         port: Environment.get("DATABASE_PORT").flatMap(Int.init(_:)) ?? PostgresConfiguration.ianaPortNumber,
@@ -18,17 +14,16 @@ public func configure(_ app: Application) throws {
         password: Environment.get("DATABASE_PASSWORD") ?? "vapor_password",
         database: Environment.get("DATABASE_NAME") ?? "vapor_database"
     ), as: .psql)
-    app.databases.use(.postgres(hostname: "127.0.0.1",
-                                username: "postgres",
-                                password: "1990823",
-                                database: "realm_log"),
-                          as: .psql)
 
-    app.migrations.add(CreateNetworkLogMigrations())
     
+    try app.routes.register(collection: try MirrorController())
+    
+    app.migrations.add(CreateMirror())
+    app.migrations.add(CreateMirrorStack())
+    app.migrations.add(CreateMirrorRequest())
     try app.autoMigrate().wait()
     
-    
+    app.logger.logLevel = .debug
     // register routes
     try routes(app)
 }

@@ -1,8 +1,8 @@
 //
 //  ResponseModel.swift
-//  
 //
-//  Created by 张行 on 2022/2/28.
+//
+//  Created by admin on 2022/3/14.
 //
 
 import Foundation
@@ -12,25 +12,35 @@ import FluentKit
 struct ResponseModel<T: Content>: Content {
     let code:Int
     let message:String
-    let success:Bool
     let data:T?
-    let page:PageMetadata?
+    let isSuccess:Bool
+    let page:Page?
     
-    init(success message:String = "请求成功",
-         data:T? = nil,
-         page:PageMetadata? = nil) {
+    init(success data:T, message:String = "请求成功", page:Page? = nil) {
         self.code = 200
         self.message = message
-        self.success = true
         self.data = data
+        self.isSuccess = true
         self.page = page
     }
     
-    init(failure message:String, code:Int) {
-        self.message = message
+    init(failure code:Int, message:String) {
         self.code = code
-        self.success = false
+        self.message = message
+        self.isSuccess = false
         self.data = nil
         self.page = nil
+    }
+}
+
+extension ResponseModel {
+    struct Page: Content {
+        let page: Int
+        let per: Int
+        let total: Int
+        var pageCount: Int {
+            let count = Int((Double(self.total)/Double(self.per)).rounded(.up))
+            return count < 1 ? 1 : count
+        }
     }
 }
