@@ -13,6 +13,7 @@ class GiteeApi {
     final let token:String
     init() throws {
         guard let token = Environment.get("GITEE_TOKEN") else {
+            print("GITEE_TOKEN不存在")
             throw Abort(.expectationFailed)
         }
         self.token = token

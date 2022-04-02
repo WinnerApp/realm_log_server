@@ -34,7 +34,7 @@ class AutoMirrorJob {
                 if let abort = e as? Abort {
                     app.logger.error("自动化任务失败: \(abort.reason)")
                     /// 制作过程中发生了报错 将错误上传给
-                   await wxHook.sendContent(abort.reason, in: app.client)
+                    wxHook.sendContent(abort.reason)
                 }
             }
             
