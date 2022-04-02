@@ -48,7 +48,6 @@ class GiteeApi {
         let uri = URI(string: url)
         print("正在请求:\(uri)")
         let response = try await client.get(uri)
-        response.printLog()
         return response.status.code == 200
     }
 }

@@ -132,9 +132,10 @@ class AutoMirrorJob {
                                                    repo: name,
                                                    mirror: name)
                 app.logger.info("创建Github Action Yml")
-                guard try await githubApi.addGithubAction(fileName: ymlFile,
-                                                          content: ymlContent,
-                                                          client: app.client) else {
+                let createOK = try await githubApi.addGithubAction(fileName: ymlFile,
+                                                                   content: ymlContent,
+                                                                   client: app.client)
+                guard createOK else {
                     app.logger.error("创建\(ymlFile)文件失败")
                     throw Abort(.custom(code: 10000, reasonPhrase: "创建\(ymlFile)文件失败"))
                 }
