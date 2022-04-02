@@ -23,7 +23,7 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CreateMirrorRequest())
     try app.autoMigrate().wait()
     
-    app.logger.logLevel = .debug
+    app.logger.logLevel = .info
     // register routes
     try routes(app)
 }

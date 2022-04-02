@@ -33,6 +33,7 @@ struct GithubApi {
                          client:Client) async throws -> Bool {
         let url = "https://api.github.com/repos/josercc/\(repo)/contents/.github/workflows/\(fileName)";
         let uri = URI(string: url)
+        print(uri)
         let response = try await client.put(uri, beforeSend: { request in
             request.headers = headers
             try request.content.encode([
@@ -40,36 +41,40 @@ struct GithubApi {
                 "content": try content.encodeBase64String()
             ], as: .json)
         })
-        if let body = response.body {
-            print(String(buffer: body))
-        }
-        print(response.status.code)
+        response.printLog()
         return response.status.code == 201
     }
     
     func isOrg(name:String, client:Client) async throws -> Bool {
         let uri = URI(string: "https://api.github.com/users/\(name)")
+        print(uri)
         let response = try await client.get(uri, beforeSend: { request in
             request.headers = headers
         })
+        response.printLog()
         let userInfo = try response.content.decode(GithubUserInfo.self)
         return userInfo.type == "Organization"
     }
     
     func ymlExit(file:String, in client:Client) async throws -> Bool {
         let uri = URI(string: "https://api.github.com/repos/josercc/\(repo)/contents/\(file)")
+        print(uri)
         let response = try await client.get(uri)
+        print(response.printLog())
         return response.status.code == 200
     }
     
     func deleteYml(fileName:String, in client:Client) async throws {
         let uri = URI(string: "https://api.github.com/repos/josercc/\(repo)/contents/.github/workflows/\(fileName)")
         /// 读取文件信息
+        print("正在读取 \(uri) 内容")
         let response = try await client.get(uri, beforeSend: { request in
             request.headers = headers
         })
+        response.printLog()
         let content = try response.content.decode(GetFileContentResponse.self)
         /// 删除文件
+        print("正在删除 \(url)")
         let deleteResponse = try await client.delete(uri, beforeSend: { request in
             request.headers = headers
             try request.content.encode([
@@ -77,6 +82,7 @@ struct GithubApi {
                 "message":"remove \(fileName)"
             ])
         })
+        deleteResponse.printLog()
         if deleteResponse.status.code != 200, let body = deleteResponse.body {
             throw Abort(.custom(code: deleteResponse.status.code,
                                 reasonPhrase: String(buffer: body)))

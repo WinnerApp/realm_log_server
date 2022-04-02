@@ -61,10 +61,10 @@ func actionContent(src:String,
 }
 
 
-extension Logger {
-    func debugResponse(response:ClientResponse) {
-        if let body = response.body {
-            debug(.init(stringLiteral: String(buffer: body)))
+extension ClientResponse {
+    func printLog() {
+        if let body = self.body {
+            print(String(buffer: body))
         }
     }
 }
