@@ -42,6 +42,7 @@ struct GithubApi {
             ], as: .json)
         })
         response.printLog()
+        print(response.status.code)
         return response.status.code == 201
     }
     
