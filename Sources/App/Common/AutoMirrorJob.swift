@@ -71,7 +71,9 @@ class AutoMirrorJob {
                 continue
             }
             app.logger.info("等待制作完毕 等待30秒继续查询")
-            sleep(30)
+            try await app.threadPool.runIfActive(eventLoop: app.eventLoopGroup.next(), {
+                sleep(30)
+            })
         }
         app.logger.info("按照创建时间获取第一条等待执行镜像的数据")
         guard let stack = try await MirrorStack.query(on: app.db).sort(\.$create).first() else {
