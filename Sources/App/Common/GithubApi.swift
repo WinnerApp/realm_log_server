@@ -59,7 +59,9 @@ struct GithubApi {
     func ymlExit(file:String, in client:Client) async throws -> Bool {
         let uri = URI(string: "https://api.github.com/repos/josercc/\(repo)/contents/\(file)")
         print(uri)
-        let response = try await client.get(uri)
+        let response = try await client.get(uri, beforeSend: { request in
+            request.headers = headers
+        })
         print(response.printLog())
         return response.status.code == 200
     }
