@@ -64,7 +64,8 @@ func actionContent(src:String,
 extension ClientResponse {
     func printLog() {
         if let body = self.body {
-            print(String(buffer: body))
+            let content = String(buffer: body)
+            print(content)
         }
     }
 }

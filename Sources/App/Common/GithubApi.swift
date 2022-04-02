@@ -74,7 +74,7 @@ struct GithubApi {
         response.printLog()
         let content = try response.content.decode(GetFileContentResponse.self)
         /// 删除文件
-        print("正在删除 \(url)")
+        print("正在删除 \(uri)")
         let deleteResponse = try await client.delete(uri, beforeSend: { request in
             request.headers = headers
             try request.content.encode([
